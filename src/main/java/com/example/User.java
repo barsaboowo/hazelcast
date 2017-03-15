@@ -25,7 +25,7 @@ public class User implements Serializable {
     @PrimaryKey
     private String uuid;
     private String name;
-    String email;
+    private String email;
 
     public String getUuid() {
         return uuid;

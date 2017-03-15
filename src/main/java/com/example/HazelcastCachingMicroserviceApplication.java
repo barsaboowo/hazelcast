@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.cassandra.config.CassandraClusterFactoryBean;
+import org.springframework.data.cassandra.config.SchemaAction;
 import org.springframework.data.cassandra.config.java.AbstractCassandraConfiguration;
 import org.springframework.data.cassandra.mapping.BasicCassandraMappingContext;
 import org.springframework.data.cassandra.mapping.CassandraMappingContext;
@@ -29,7 +30,7 @@ public class HazelcastCachingMicroserviceApplication {
     String mapName;
 
     @Configuration
-    @EnableCassandraRepositories(basePackages = {"com.example.repositories"})
+    @EnableCassandraRepositories(basePackages = {"com.example"})
     static class CassandraConfiguration extends AbstractCassandraConfiguration {
 
         @Value("${cassandra.port}")
@@ -44,6 +45,11 @@ public class HazelcastCachingMicroserviceApplication {
         @Override
         protected String getKeyspaceName() {
             return keyspace;
+        }
+
+        @Override
+        public SchemaAction getSchemaAction() {
+            return SchemaAction.CREATE_IF_NOT_EXISTS;
         }
 
         @Override
@@ -105,12 +111,12 @@ public class HazelcastCachingMicroserviceApplication {
 
 		final MapStoreConfig mapStoreConfig = new MapStoreConfig();
 		mapStoreConfig.setEnabled(true);
-		mapStoreConfig.setWriteDelaySeconds(60);
-		mapStoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.EAGER);
-		mapStoreConfig.setImplementation(mapName);
-		mapConfig.setMapStoreConfig(mapStoreConfig);
+        mapStoreConfig.setWriteDelaySeconds(1);
+        mapStoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.EAGER);
+        mapStoreConfig.setImplementation(mapStore);
+        mapConfig.setMapStoreConfig(mapStoreConfig);
 		config.addMapConfig(mapConfig);
 
-		return Hazelcast.newHazelcastInstance(config);
-	}
+        return Hazelcast.newHazelcastInstance(config);
+    }
 }

@@ -1,5 +1,6 @@
 package com.example;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.cassandra.repository.CassandraRepository;
 import org.springframework.data.cassandra.repository.support.BasicMapId;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.Optional;
 @Service
 public class Store<KeyType extends Serializable, EntityType extends Serializable> implements com.hazelcast.core.MapStore<KeyType, EntityType> {
 
+    @Autowired
     private CassandraRepository<EntityType> repository;
 
     @Override
@@ -40,7 +42,7 @@ public class Store<KeyType extends Serializable, EntityType extends Serializable
 
     @Override
     public EntityType load(KeyType key) {
-        return repository.findOne(BasicMapId.id("id", key));
+        return repository.findOne(BasicMapId.id("uuid", key));
     }
 
     @Override
