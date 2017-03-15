@@ -1,0 +1,1 @@
+create keyspace if not exists dtp_rules with replication = {'class':'SimpleStrategy', 'replication_factor':1};
