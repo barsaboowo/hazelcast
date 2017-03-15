@@ -61,7 +61,7 @@ public class HazelcastCachingMicroserviceApplication {
 			CassandraClusterFactoryBean cluster =
 					new CassandraClusterFactoryBean();
 			cluster.setContactPoints(hostName);
-			cluster.setPort(9142);
+			cluster.setPort(port);
 			return cluster;
 		}
 
